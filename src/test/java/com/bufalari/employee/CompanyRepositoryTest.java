@@ -1,5 +1,6 @@
 package com.bufalari.employee;
 
+import com.bufalari.employee.entity.AddressEntity;
 import com.bufalari.employee.entity.CompanyEntity;
 import com.bufalari.employee.repository.CompanyRepository;
 import org.junit.jupiter.api.Test;
@@ -21,11 +22,9 @@ public class CompanyRepositoryTest {
 
     @Test
     void testSaveAndFindCompany() {
-        CompanyEntity company = new CompanyEntity("Bufalari Corp", "123 Main St", "Halifax", "Canada");
-
-        // Salva a CompanyEntity, persistindo automaticamente o endereço associado.
-        company = companyRepository.save(company);
-
+        CompanyEntity company = new CompanyEntity("Bufalari Corp", "Halifax", "Canada", "123456789");
+        company.setAddress(new AddressEntity("123 Main St", "Halifax", "NS", "B3J 2K9", "Canada"));
+        companyRepository.save(company);
         CompanyEntity foundCompany = companyRepository.findById(company.getId()).orElse(null);
 
         assertThat(foundCompany).isNotNull();
@@ -35,14 +34,11 @@ public class CompanyRepositoryTest {
 
     @Test
     void testDeleteCompany() {
-        CompanyEntity company = new CompanyEntity("Bufalari Corp", "123 Main St", "Halifax", "Canada");
-
-        // Salva a CompanyEntity, persistindo automaticamente o endereço associado.
-        company = companyRepository.save(company);
+        CompanyEntity company = new CompanyEntity("Bufalari Corp", "Halifax", "Canada", "123456789");
+        company.setAddress(new AddressEntity("123 Main St", "Halifax", "NS", "B3J 2K9", "Canada"));
+        companyRepository.save(company);
 
         companyRepository.deleteById(company.getId());
-
-        // Verifica se a empresa e o endereço foram excluídos.
         assertThat(companyRepository.findById(company.getId()).isEmpty()).isTrue();
     }
 }

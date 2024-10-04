@@ -23,19 +23,22 @@ public class CompanyEntity {
     private String country;
     private String businessIdentificationNumber;
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "company") // Add CascadeType.PERSIST
-    @MapsId
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "street", column = @Column(name = "address_street")),
+            @AttributeOverride(name = "city", column = @Column(name = "address_city")), // City of the address
+            @AttributeOverride(name = "state", column = @Column(name = "address_state")),
+            @AttributeOverride(name = "postalCode", column = @Column(name = "address_postal_code")),
+            @AttributeOverride(name = "country", column = @Column(name = "address_country"))
+    }) // Define custom column names for address attributes
     private AddressEntity address;
 
-    // Construtor customizado
+    // Custom constructor
     public CompanyEntity(String name, String city, String country, String businessIdentificationNumber) {
         this.name = name;
         this.city = city;
         this.country = country;
         this.businessIdentificationNumber = businessIdentificationNumber;
-
         this.address = new AddressEntity();
-        // Define o ID do endereço aqui:
-        this.address.setId(this.id); //  <- Adicione essa linha
     }
 }
