@@ -24,4 +24,9 @@ public class CompanyService {
     public void deleteById(Long id) {
         companyRepository.deleteById(id);
     }
+
+    public CompanyEntity findByIdOrThrow(Long id) {
+        return companyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+    }
 }

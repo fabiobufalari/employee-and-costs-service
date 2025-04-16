@@ -6,6 +6,10 @@ import lombok.Data;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Entidade que representa um funcionário no sistema.
+ * Entity representing an employee in the system.
+ */
 @Entity
 @Data
 @Table(name = "employees")
@@ -37,4 +41,10 @@ public class EmployeeEntity {
 
     private Double salary;
     private String payFrequency;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<WorkHoursEntity> workHours;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AllocationHistoryEntity> allocationHistory;
 }
