@@ -12,7 +12,6 @@ public class EmployeeDTO {
     private String socialInsuranceNumber;
     private LocalDate birthDate;
     private LocalDate hireDate;
-    private CompanyDTO company;
     private RoleDTO role;
     private AddressDTO address;
     private List<ContactDTO> contacts;

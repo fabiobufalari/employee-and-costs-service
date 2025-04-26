@@ -7,6 +7,5 @@ import java.util.List;
 public class DepartmentDTO {
     private Long id;
     private String name;
-    private CompanyDTO company;
     private List<SubDepartmentDTO> subDepartments;
 }

@@ -16,10 +16,7 @@ public class EmployeeConverter {
         employeeDTO.setSocialInsuranceNumber(employeeEntity.getSocialInsuranceNumber());
         employeeDTO.setBirthDate(employeeEntity.getBirthDate());
         employeeDTO.setHireDate(employeeEntity.getHireDate());
-        employeeDTO.setCompany(new CompanyConverter().entityToDTO(employeeEntity.getCompany()));
-        employeeDTO.setRole(new RoleConverter().entityToDTO(employeeEntity.getRole()));
         employeeDTO.setAddress(new AddressConverter().entityToDTO(employeeEntity.getAddress()));
-        employeeDTO.setSalary(employeeEntity.getSalary());
         employeeDTO.setPayFrequency(employeeEntity.getPayFrequency());
         // Omitted contacts for brevity
 
@@ -34,10 +31,7 @@ public class EmployeeConverter {
         employeeEntity.setSocialInsuranceNumber(employeeDTO.getSocialInsuranceNumber());
         employeeEntity.setBirthDate(employeeDTO.getBirthDate());
         employeeEntity.setHireDate(employeeDTO.getHireDate());
-        employeeEntity.setCompany(new CompanyConverter().dtoToEntity(employeeDTO.getCompany()));
-        employeeEntity.setRole(new RoleConverter().dtoToEntity(employeeDTO.getRole()));
         employeeEntity.setAddress(new AddressConverter().dtoToEntity(employeeDTO.getAddress()));
-        employeeEntity.setSalary(employeeDTO.getSalary());
         employeeEntity.setPayFrequency(employeeDTO.getPayFrequency());
         // Omitted contacts for brevity
 

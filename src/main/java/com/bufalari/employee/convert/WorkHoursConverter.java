@@ -19,9 +19,7 @@ public class WorkHoursConverter {
         WorkHoursDTO dto = new WorkHoursDTO();
         dto.setId(entity.getId());
         dto.setEmployeeId(entity.getEmployee().getId());
-        dto.setConstructionId(entity.getConstructionId());
         dto.setWorkDate(entity.getWorkDate());
-        dto.setHoursWorked(entity.getHoursWorked());
         return dto;
     }
 
@@ -32,9 +30,7 @@ public class WorkHoursConverter {
     public WorkHoursEntity dtoToEntity(WorkHoursDTO dto) {
         WorkHoursEntity entity = new WorkHoursEntity();
         entity.setId(dto.getId());
-        entity.setConstructionId(dto.getConstructionId());
         entity.setWorkDate(dto.getWorkDate());
-        entity.setHoursWorked(dto.getHoursWorked());
         return entity;
     }
 }
