@@ -1,0 +1,87 @@
+# Server Configuration / Configuração do Servidor
+server:
+  port: 8084 # Port the service will run on / Porta em que o serviço será executado
+
+# Spring Boot Application Configuration / Configuração da Aplicação Spring Boot
+spring:
+  application:
+    name: employee-and-costs-service # Application name / Nome da aplicação (já atualizado)
+
+  # Datasource Configuration (PostgreSQL) / Configuração do Datasource (PostgreSQL)
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/postgres # DB URL / URL do BD (ajuste se necessário)
+    username: postgres # DB Username / Usuário do BD
+    password: postgres # DB Password / Senha do BD
+
+  # JPA & Hibernate Configuration / Configuração JPA & Hibernate
+  jpa:
+    hibernate:
+      # Automatically update schema (use 'validate' or 'none' in production)
+      # Atualiza o schema automaticamente (use 'validate' ou 'none' em produção)
+      ddl-auto: update
+    # show-sql: true # Uncomment to log SQL statements / Descomente para logar statements SQL
+    # properties:
+    #   hibernate:
+    #     format_sql: true # Format SQL logs / Formata logs SQL
+
+  # SQL Initialization Configuration / Configuração de Inicialização SQL
+  sql:
+    init:
+      enabled: false # Disable automatic execution of schema.sql/data.sql / Desabilita execução automática de schema.sql/data.sql
+
+# Feign Client Configuration / Configuração do Cliente Feign
+feign:
+  # Configuration specific to the 'auth-service' client / Configuração específica para o cliente 'auth-service'
+  client:
+    config:
+      # Name matches the @FeignClient annotation name attribute / Nome corresponde ao atributo name da anotação @FeignClient
+      auth-service:
+        # Define connection and read timeouts in milliseconds / Define timeouts de conexão e leitura em milissegundos
+        connectTimeout: 5000
+        readTimeout: 10000
+      # Default configurations for all Feign clients if needed / Configurações padrão para todos os clientes Feign se necessário
+      # default:
+      #   connectTimeout: 5000
+      #   readTimeout: 5000
+  # Enable OkHttp client for Feign (optional, requires dependency) / Habilita cliente OkHttp para Feign (opcional, requer dependência)
+  # okhttp:
+  #   enabled: false
+  # Enable Apache HttpClient for Feign (optional, requires dependency) / Habilita cliente Apache HttpClient para Feign (opcional, requer dependência)
+  httpclient:
+    enabled: true # Enabled in the original properties / Habilitado nas propriedades originais
+
+# Authentication Service Configuration / Configuração do Serviço de Autenticação
+auth:
+  service:
+    # URL of the authentication service for Feign client / URL do serviço de autenticação para o cliente Feign
+    url: ${AUTH_SERVICE_URL:http://localhost:8083} # Use environment variable or default / Usa variável de ambiente ou padrão
+
+# JWT Configuration (Secret Key needed by JwtUtil) / Configuração JWT (Chave Secreta necessária pelo JwtUtil)
+security:
+  jwt:
+    # VERY IMPORTANT: Store this securely, e.g., via environment variables or a secret manager in production.
+    # MUITO IMPORTANTE: Armazene isso de forma segura, ex: via variáveis de ambiente ou um gerenciador de segredos em produção.
+    token:
+      secret-key: ${JWT_SECRET_KEY:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970!}
+# Logging Configuration / Configuração de Logging
+logging:
+  level:
+    # Set log levels for specific packages / Define níveis de log para pacotes específicos
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    com.bufalari.employee: DEBUG # Set your package to DEBUG for development / Defina seu pacote como DEBUG para desenvolvimento
+    # org.hibernate.SQL: DEBUG # Uncomment to see SQL statements / Descomente para ver statements SQL
+    # org.hibernate.type.descriptor.sql: TRACE # Uncomment to see SQL parameters / Descomente para ver parâmetros SQL
+
+# Swagger/OpenAPI Configuration / Configuração Swagger/OpenAPI
+springdoc:
+  api-docs:
+    path: /v3/api-docs # Path for the OpenAPI specification JSON/YAML / Caminho para a especificação OpenAPI JSON/YAML
+  swagger-ui:
+    path: /swagger-ui.html # Path for the Swagger UI / Caminho para a UI do Swagger
+    display-request-duration: true # Show request duration / Mostrar duração da requisição
+    operations-sorter: method # Sort operations alphabetically by HTTP method / Ordenar operações alfabeticamente por método HTTP
+  # Default produces/consumes media type / Tipo de mídia padrão de produção/consumo
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json

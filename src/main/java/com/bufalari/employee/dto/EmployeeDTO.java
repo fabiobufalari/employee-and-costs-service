@@ -14,7 +14,6 @@ public class EmployeeDTO {
     private LocalDate hireDate;
     private RoleDTO role;
     private AddressDTO address;
-    private List<ContactDTO> contacts;
     private Double salary;
     private String payFrequency;
 }

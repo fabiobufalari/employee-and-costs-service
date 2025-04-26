@@ -1,27 +1,51 @@
+// Path: employee-and-costs-service/src/main/java/com/bufalari/employee/dto/AllocationHistoryDTO.java
 package com.bufalari.employee.dto;
 
-import lombok.Data;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 import java.time.LocalDate;
 
 /**
+ * DTO for representing the allocation history of an employee.
  * DTO para representar o histórico de alocação de um funcionário.
- * DTO representing the allocation history of an employee.
  */
 @Data
 public class AllocationHistoryDTO {
 
     private Long id;
 
-    @NotNull(message = "Employee ID is required")
+    /**
+     * ID of the allocated employee.
+     * ID do funcionário alocado.
+     */
+    @NotNull(message = "Employee ID is required / ID do funcionário é obrigatório")
     private Long employeeId;
 
-    @NotNull(message = "Construction ID is required")
-    private Long constructionId;
+    /**
+     * ID of the project the employee is allocated to.
+     * ID do projeto ao qual o funcionário está alocado.
+     */
+    // Rename field / Renomeia campo
+    @NotNull(message = "Project ID is required / ID do projeto é obrigatório")
+    private Long projectId;
 
-    @NotNull(message = "Start date is required")
+    /**
+     * Start date of the allocation.
+     * Data de início da alocação.
+     */
+    @NotNull(message = "Start date is required / Data de início é obrigatória")
     private LocalDate startDate;
 
+    /**
+     * End date of the allocation (optional, null if active).
+     * Data de término da alocação (opcional, nulo se ativa).
+     */
     private LocalDate endDate;
+
+    /**
+     * Optional description.
+     * Descrição opcional.
+     */
+    private String description;
 }

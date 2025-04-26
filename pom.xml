@@ -43,11 +43,6 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
-			<version>0.9.1</version>
-		</dependency>
-		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>2.1.0</version>
@@ -65,6 +60,24 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<!-- ADICIONE ESTAS NOVAS DEPENDÊNCIAS JWT / ADD THESE NEW JWT DEPENDENCIES -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version> <!-- Use uma versão consistente / Use a consistent version -->
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope> <!-- Implementação necessária apenas em runtime / Implementation needed only at runtime -->
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if you use Gson / ou jjwt-gson se você usa Gson -->
+			<version>0.11.5</version>
+			<scope>runtime</scope> <!-- Necessário para serialização/desserialização JSON / Needed for JSON serialization/deserialization -->
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
