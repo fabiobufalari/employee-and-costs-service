@@ -6,23 +6,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-/**
- * Configuration class to enable JPA Auditing.
- * Classe de configuração para habilitar a Auditoria JPA.
- */
 @Configuration
-@EnableJpaAuditing(auditorAwareRef = "auditorProvider") // Specify the bean name for AuditorAware
+@EnableJpaAuditing(auditorAwareRef = "auditorProvider") // Ref é "auditorProvider"
 public class JpaAuditingConfig {
 
-    /**
-     * Provides the AuditorAware bean implementation.
-     * Fornece a implementação do bean AuditorAware.
-     *
-     * @return An instance of AuditorAware<String>.
-     *         Uma instância de AuditorAware<String>.
-     */
     @Bean
-    public AuditorAware<String> auditorProvider() {
+    public AuditorAware<String> auditorProvider() { // Nome do bean é "auditorProvider"
         return new AuditorAwareImpl();
     }
 }
