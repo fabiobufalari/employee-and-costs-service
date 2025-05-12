@@ -1,10 +1,10 @@
-package com.bufalari.employee.config;
+package com.bufalari.employee.security;
 
 import com.bufalari.employee.client.AuthServiceClient;
 import com.bufalari.employee.dto.UserDetailsDTO;
-import feign.FeignException; // Importar FeignException
-import org.slf4j.Logger; // Importar Logger
-import org.slf4j.LoggerFactory; // Importar LoggerFactory
+import feign.FeignException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -13,14 +13,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections; // Para lista vazia
+import java.util.Collections;
 import java.util.stream.Collectors;
 
-/**
- * Serviço para carregar detalhes do usuário do serviço de autenticação.
- * Service to load user details from the authentication service.
- */
-@Service("employeeUserDetailsService") // Mantendo o nome do bean
+@Service("employeeUserDetailsService") // Nome explícito do bean
 public class CustomUserDetailsService implements UserDetailsService {
 
     private static final Logger log = LoggerFactory.getLogger(CustomUserDetailsService.class);
@@ -32,10 +28,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.authServiceClient = authServiceClient;
     }
 
-    /**
-     * Carrega os detalhes do usuário pelo nome de usuário.
-     * Loads user details by username.
-     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("Attempting to load user details for username: {}", username);
@@ -48,13 +40,12 @@ public class CustomUserDetailsService implements UserDetailsService {
                 throw new UsernameNotFoundException("User not found: " + username + " (Auth service returned null)");
             }
 
-            // A senha não é usada para validação JWT neste ponto, mas o construtor de User a requer.
-            String passwordPlaceholder = ""; // Ou um valor como "{noop}PASSWORD_NOT_USED"
+            String passwordPlaceholder = ""; 
 
             log.info("Successfully loaded user details via auth service for username: {}", userDetailsDTO.getUsername());
             return new User(
                     userDetailsDTO.getUsername(),
-                    passwordPlaceholder, // <<< ADICIONADO O ARGUMENTO DA SENHA (placeholder)
+                    passwordPlaceholder, 
                     userDetailsDTO.getRoles() != null ?
                             userDetailsDTO.getRoles().stream()
                                     .map(role -> new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
@@ -68,7 +59,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             log.error("Feign error calling authentication service for username: {}. Status: {}, Message: {}", username, e.status(), e.getMessage(), e);
             throw new UsernameNotFoundException("Failed to load user details (auth service communication error) for user: " + username, e);
         } catch (Exception e) {
-            // Logar a exceção original para melhor diagnóstico
             log.error("Unexpected error loading user details for username: " + username, e);
             throw new UsernameNotFoundException("Unexpected error loading user details for user: " + username + ". Cause: " + e.getMessage(), e);
         }

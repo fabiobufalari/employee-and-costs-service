@@ -1,37 +1,43 @@
 package com.bufalari.employee.dto;
 
+import jakarta.validation.constraints.NotBlank; // Usar @NotBlank para Strings
+import jakarta.validation.constraints.NotNull; // Mantido para referência futura
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import jakarta.validation.constraints.NotNull;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressDTO {
-    @NotNull(message = "Street name is required")
+
+    @NotBlank(message = "{address.street.required}") // NotBlank é mais apropriado para String
     private String street;
 
-    @NotNull(message = "Street number is required")
-    private String number;
+    // O campo 'number' estava faltando no DTO, mas presente no Converter/Entity original. Adicionando.
+    @NotBlank(message = "{address.number.required}")
+    private String number; // <<< ADICIONADO
 
-    private String complement;
-    private String neighbourhood;
+    // Estes campos não estavam no DTO original, mas estavam no converter/entity de company. Removendo por consistência com o DTO atual.
+    // private String complement;
+    // private String neighbourhood;
 
-    @NotNull(message = "City is required")
+    @NotBlank(message = "{address.city.required}")
     private String city;
 
-    @NotNull(message = "Province is required")
+    @NotBlank(message = "{address.province.required}") // Renomeado de 'state' para 'province' para consistência com company
     private String province;
 
-    @NotNull(message = "Postal code is required")
+    @NotBlank(message = "{address.postalCode.required}")
     private String postalCode;
 
-    @NotNull(message = "State is required")
-    private String state;
-
-    @NotNull(message = "Country is required")
+    @NotBlank(message = "{address.country.required}")
     private String country;
 
-    private String googleMapsLink;
+    // O campo googleMapsLink não estava no DTO, adicionar se necessário.
+    // private String googleMapsLink;
+
+    // O campo 'state' foi removido para usar 'province' consistentemente.
+    // @NotNull(message = "State is required")
+    // private String state;
 }

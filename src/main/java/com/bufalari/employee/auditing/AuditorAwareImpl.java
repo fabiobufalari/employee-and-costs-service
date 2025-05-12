@@ -30,7 +30,7 @@ public class AuditorAwareImpl implements AuditorAware<String> {
         if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
             // Handle cases where there is no authenticated user (e.g., system processes, tests)
             // Trata casos onde não há usuário autenticado (ex: processos do sistema, testes)
-            return Optional.of("system"); // Or return Optional.empty() based on requirements
+            return Optional.of("system_employee"); // Or return Optional.empty() based on requirements
         }
 
         // Assuming the principal is the username string stored by JwtAuthFilter

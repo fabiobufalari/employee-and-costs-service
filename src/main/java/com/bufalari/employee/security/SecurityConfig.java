@@ -1,4 +1,4 @@
-package com.bufalari.employee.config;
+package com.bufalari.employee.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

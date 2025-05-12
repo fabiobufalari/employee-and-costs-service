@@ -1,9 +1,10 @@
 package com.bufalari.employee.exception;
 
-import jakarta.servlet.http.HttpServletRequest; // Correct import for Jakarta EE
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -13,42 +14,25 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * Global exception handler for the Employee and Costs Service API.
- * Catches specific exceptions and formats them into a standardized ErrorResponse.
- * Manipulador global de exceções para a API do Serviço de Funcionários e Custos.
- * Captura exceções específicas e as formata em um ErrorResponse padronizado.
- */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-    /**
-     * Standard structure for API error responses.
-     * Estrutura padrão para respostas de erro da API.
-     */
     public record ErrorResponse(
             LocalDateTime timestamp,
             int status,
             String error,
             String message,
             String path,
-            Object details // For validation errors or other details / Para erros de validação ou outros detalhes
+            Object details
     ) {}
 
-    // --- 400 Bad Request ---
-
-    /**
-     * Handles bean validation errors (@Valid).
-     * Trata erros de validação de bean (@Valid).
-     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex, HttpServletRequest request) {
         Map<String, String> errors = new HashMap<>();
@@ -60,10 +44,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * Handles constraint violations (e.g., path variables, request parameters).
-     * Trata violações de constraint (ex: variáveis de path, parâmetros de requisição).
-     */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException ex, HttpServletRequest request) {
         String errors = ex.getConstraintViolations()
@@ -76,10 +56,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    /**
-     * Handles general bad request errors like illegal arguments or state.
-     * Trata erros gerais de bad request como argumentos ou estado ilegal.
-     */
     @ExceptionHandler({IllegalArgumentException.class, IllegalStateException.class, MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ErrorResponse> handleBadDataExceptions(Exception ex, HttpServletRequest request) {
          String message = "Invalid request data or state: " + ex.getMessage() + " / Dados da requisição ou estado inválido: " + ex.getMessage();
@@ -88,12 +64,6 @@ public class GlobalExceptionHandler {
          return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    // --- 401 Unauthorized ---
-
-    /**
-     * Handles authentication errors.
-     * Trata erros de autenticação.
-     */
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
         String message = "Authentication failed: " + ex.getMessage() + " / Falha na autenticação: " + ex.getMessage();
@@ -102,12 +72,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
-    // --- 403 Forbidden ---
-
-    /**
-     * Handles access denied errors (e.g., insufficient roles/permissions).
-     * Trata erros de acesso negado (ex: roles/permissões insuficientes).
-     */
      @ExceptionHandler(AccessDeniedException.class)
      public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
          String message = "Access Denied: You do not have permission for this action. / Acesso Negado: Você não tem permissão para esta ação.";
@@ -116,15 +80,29 @@ public class GlobalExceptionHandler {
          return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
      }
 
-    // --- 404 Not Found ---
-    // Consider creating a specific ResourceNotFoundException or using IllegalArgumentException
+    // <<<--- ADICIONAR/CONFIRMAR ESTE HANDLER ---<<<
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
+        log.warn("Resource not found: {} - Path: {}", ex.getMessage(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                ex.getMessage(), // Mensagem da exceção
+                request.getRequestURI(),
+                null // Sem detalhes adicionais
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
 
-    // --- 500 Internal Server Error ---
+     @ExceptionHandler(DataIntegrityViolationException.class)
+     public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
+         String message = "Data integrity violation. A resource with the same unique identifier might already exist.";
+         log.error("Data integrity violation - Path: {}: {}", request.getRequestURI(), ex.getMostSpecificCause().getMessage());
+         ErrorResponse errorResponse = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.getReasonPhrase(), message, request.getRequestURI(), null);
+         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+     }
 
-    /**
-     * Handles unexpected errors.
-     * Trata erros inesperados.
-     */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
         String message = "An unexpected internal error occurred. / Ocorreu um erro interno inesperado.";

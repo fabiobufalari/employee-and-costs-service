@@ -1,4 +1,3 @@
-// Path: employee-and-costs-service/src/main/java/com/bufalari/employee/enums/EmploymentType.java
 package com.bufalari.employee.enums;
 
 /**
@@ -6,11 +5,11 @@ package com.bufalari.employee.enums;
  * Enum representando diferentes tipos de contratos de trabalho.
  */
 public enum EmploymentType {
-    FULL_TIME("Full-Time", "Tempo Integral"),
-    PART_TIME("Part-Time", "Meio Período"),
-    CONTRACTOR("Contractor", "Contratado/Terceirizado"),
-    INTERN("Intern", "Estagiário"),
-    TEMPORARY("Temporary", "Temporário");
+    FULL_TIME("Full-Time", "Tempo Integral"),         // Funcionário em tempo integral
+    PART_TIME("Part-Time", "Meio Período"),         // Funcionário em meio período
+    CONTRACTOR("Contractor", "Contratado/Terceirizado"), // Prestador de serviço (PJ ou autônomo)
+    INTERN("Intern", "Estagiário"),                 // Estagiário
+    TEMPORARY("Temporary", "Temporário");             // Funcionário temporário (CLT ou contrato por prazo)
 
     private final String descriptionEn;
     private final String descriptionPt;
@@ -28,9 +27,14 @@ public enum EmploymentType {
         return descriptionPt;
     }
 
-    // Optional: Method to get description based on Locale
+    // Optional: Método para obter descrição baseado no Locale
     // Opcional: Método para obter descrição baseado no Locale
-    // public String getDescription(Locale locale) {
-    //     return Locale.CANADA.equals(locale) || Locale.US.equals(locale) || Locale.UK.equals(locale) ? descriptionEn : descriptionPt;
+    // public String getDescription(java.util.Locale locale) {
+    //     // Exemplo simples, pode ser mais robusto
+    //     if (java.util.Locale.CANADA.equals(locale) || java.util.Locale.US.equals(locale) || java.util.Locale.UK.equals(locale)) {
+    //         return descriptionEn;
+    //     } else { // Default para pt-BR ou outros
+    //         return descriptionPt;
+    //     }
     // }
 }
