@@ -31,7 +31,7 @@ import java.util.UUID; // <<<--- IMPORT UUID
  * Controller for managing employees (using UUID), including work hours and allocation.
  */
 @RestController
-@RequestMapping("/api/employees")
+@RequestMapping("/employee-and-costs/employees")
 @RequiredArgsConstructor // Injeção via construtor
 @Tag(name = "Employee Management", description = "Endpoints for managing employees, work hours, and allocations")
 public class EmployeeController {
